@@ -413,23 +413,19 @@ header {
   }
 }
 
-/* ============================
- * Skip Link Styles
- * ============================ */
-
 .skip-link {
   position: absolute;
-  top: -40px; /* Sembunyikan di luar viewport */
+  top: -40px; 
   left: 0;
-  background-color: #007bff; /* Warna latar belakang agar menonjol */
+  background-color: #007bff; 
   color: white;
   padding: 8px;
-  z-index: 10000; /* Pastikan selalu di atas elemen lain */
-  text-decoration: none; /* Hilangkan garis bawah */
+  z-index: 10000; 
+  text-decoration: none; 
   font-weight: bold;
-  border-radius: 0 0 5px 0; /* Sudut sedikit membulat */
+  border-radius: 0 0 5px 0; 
 }
 
 .skip-link:focus {
-  top: 0; /* Tampilkan saat di-focus */
+  top: 0; 
 }
