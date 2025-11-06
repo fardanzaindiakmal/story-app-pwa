@@ -4,7 +4,7 @@ export default class NotificationPage {
     return `
       <section class="container add-story-page">
         <div style="margin-top: 30px; border-top: 1px solid #ddd; padding-top: 20px; text-align: center;">
-          <h4>Pengaturan Notifikasi</h4>
+          <h1>Pengaturan Notifikasi</h1>
           <button id="notificationToggle" class="auth-form button" style="padding: 10px 15px; width: auto;">
             Mengambil status...
           </button>

@@ -12,7 +12,7 @@ export default class AddStoryPage {
   async render() {
     return `
       <section class="container add-story-page">
-        <h2>Tambah Cerita Baru</h2>
+        <h1>Tambah Cerita Baru</h1>
         <form id="addStoryForm" class="add-story-form" novalidate>
           <div class="form-group">
             <label for="descriptionInput">Deskripsi</label>
@@ -28,7 +28,7 @@ export default class AddStoryPage {
           </div>
 
           <div class="form-group">
-            <label>Lokasi (Klik Peta untuk Memilih)</label>
+            <label for="latitudeInput">Lokasi (Klik Peta untuk Memilih)</label>
             <div id="add-story-map"></div>
             <input type="hidden" id="latitudeInput" name="lat">
             <input type="hidden" id="longitudeInput" name="lon">

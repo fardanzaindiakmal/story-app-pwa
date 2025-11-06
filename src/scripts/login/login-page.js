@@ -4,7 +4,7 @@ export default class LoginPage {
   async render() {
     return `
       <section class="container">
-        <h2>Login Akun</h2>
+        <h1>Login Akun</h1>
         <form id="loginForm" class="auth-form" novalidate>
           <div class="form-group">
             <label for="emailInput">Email</label>

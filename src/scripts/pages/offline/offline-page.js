@@ -8,7 +8,7 @@ export default class OfflinePage {
   async render() {
     return `
       <section class="container" style="max-width: 800px; margin: 20px auto;">
-        <h2>Cerita Tertunda</h2>
+        <h1>Cerita Tertunda</h1>
         <p>Cerita ini disimpan secara lokal dan akan diunggah saat Anda kembali online.</p>
 
         <div class="form-group" style="margin-block: 20px;">

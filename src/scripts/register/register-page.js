@@ -4,7 +4,7 @@ export default class RegisterPage {
   async render() {
     return `
       <section class="container">
-        <h2>Buat Akun Baru</h2>
+        <h1>Buat Akun Baru</h1>
         <form id="registerForm" class="auth-form" novalidate>
           <div class="form-group">
             <label for="nameInput">Nama</label>

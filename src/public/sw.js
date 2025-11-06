@@ -6,12 +6,12 @@ const API_BASE_URL = 'https://story-api.dicoding.dev/v1';
 
 
 const APP_SHELL_URLS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/favicon.png',
-  '/images/logo.png',
-  '/app.bundle.js', 
+  '.',
+  'index.html',
+  'manifest.json',
+  'favicon.png',
+  'images/logo.png',
+  'app.bundle.js', 
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
   'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',

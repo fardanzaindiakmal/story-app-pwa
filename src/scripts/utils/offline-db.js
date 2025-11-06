@@ -1,63 +1,62 @@
+import { openDB } from 'idb';
+
 const DB_NAME = 'story-app-db';
 const DB_VERSION = 1;
-const OBJECT_STORE_NAME = 'pending_stories';
 
-function openDb() {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, DB_VERSION);
+const PENDING_STORE_NAME = 'pending_stories';
+const BOOKMARK_STORE_NAME = 'bookmarked_stories';
 
-    request.onupgradeneeded = (event) => {
-      const db = event.target.result;
-      if (!db.objectStoreNames.contains(OBJECT_STORE_NAME)) {
-        
-        db.createObjectStore(OBJECT_STORE_NAME, { keyPath: 'id', autoIncrement: true });
-      }
-    };
-
-    request.onsuccess = (event) => {
-      resolve(event.target.result);
-    };
-
-    request.onerror = (event) => {
-      reject(event.target.error);
-    };
-  });
-}
+const dbPromise = openDB(DB_NAME, DB_VERSION, {
+  upgrade(database) {
+    if (!database.objectStoreNames.contains(PENDING_STORE_NAME)) {
+      database.createObjectStore(PENDING_STORE_NAME, { keyPath: 'id', autoIncrement: true });
+    }
+    if (!database.objectStoreNames.contains(BOOKMARK_STORE_NAME)) {
+      database.createObjectStore(BOOKMARK_STORE_NAME, { keyPath: 'id' });
+    }
+  },
+});
 
 export async function addPendingStory(story) {
-  const db = await openDb();
-  return new Promise((resolve, reject) => {
-    
-    const transaction = db.transaction([OBJECT_STORE_NAME], 'readwrite');
-    const store = transaction.objectStore(OBJECT_STORE_NAME);
-    const request = store.add(story);
-
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error);
-  });
+  const db = await dbPromise;
+  return db.add(PENDING_STORE_NAME, story);
 }
 
 export async function getAllPendingStories() {
-  const db = await openDb();
-  return new Promise((resolve, reject) => {
-    const transaction = db.transaction([OBJECT_STORE_NAME], 'readonly');
-    const store = transaction.objectStore(OBJECT_STORE_NAME);
-    const request = store.getAll();
-
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error);
-  });
+  const db = await dbPromise;
+  return db.getAll(PENDING_STORE_NAME);
 }
 
 export async function deletePendingStory(id) {
-  const db = await openDb();
-  return new Promise((resolve, reject) => {
-    const transaction = db.transaction([OBJECT_STORE_NAME], 'readwrite');
-    const store = transaction.objectStore(OBJECT_STORE_NAME);
-    
-    const request = store.delete(Number(id));
+  const db = await dbPromise;
+  return db.delete(PENDING_STORE_NAME, Number(id));
+}
 
-    request.onsuccess = () => resolve();
-    request.onerror = () => reject(request.error);
-  });
+export async function addBookmarkStory(story) {
+  if (!story.id) {
+    throw new Error('`id` is required to bookmark a story.');
+  }
+  const db = await dbPromise;
+  return db.put(BOOKMARK_STORE_NAME, story);
+}
+
+export async function getAllBookmarkStories() {
+  const db = await dbPromise;
+  return db.getAll(BOOKMARK_STORE_NAME);
+}
+
+export async function getBookmarkStoryById(id) {
+  if (!id) {
+    throw new Error('`id` is required.');
+  }
+  const db = await dbPromise;
+  return db.get(BOOKMARK_STORE_NAME, id);
+}
+
+export async function deleteBookmarkStory(id) {
+  if (!id) {
+    throw new Error('`id` is required.');
+  }
+  const db = await dbPromise;
+  return db.delete(BOOKMARK_STORE_NAME, id);
 }
