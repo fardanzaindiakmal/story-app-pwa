@@ -2,7 +2,7 @@
   "name": "Story App - PWA",
   "short_name": "Story App",
   "description": "A Progressive Web App for sharing stories with location.",
-  "start_url": "/",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "lightskyblue",
@@ -47,7 +47,7 @@
       "name": "Add New Story",
       "short_name": "Add Story",
       "description": "Create a new story with location",
-      "url": "/#/add",
+      "url": "./#/add",
       "icons": [
         {
           "src": "favicon.png",
