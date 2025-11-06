@@ -1,6 +1,5 @@
-// ... import lainnya
 import HomePage from '../pages/home/home-page';
-// REVISI DI SINI
+
 import NotificationPage from '../pages/notification/notification-page'; 
 import AddPage from '../pages/add/add-page';
 import LoginPage from '../login/login-page';
@@ -13,7 +12,7 @@ const routes = {
   '/register': RegisterPage,
   '/add': AddPage,
   '/offline': OfflinePage, 
-  // REVISI DI SINI
+  
   '/notification': NotificationPage, 
 };
 

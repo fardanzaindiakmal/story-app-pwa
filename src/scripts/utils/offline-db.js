@@ -1,5 +1,3 @@
-// Menggunakan Vanilla IndexedDB agar sesuai dengan gaya proyek Anda
-
 const DB_NAME = 'story-app-db';
 const DB_VERSION = 1;
 const OBJECT_STORE_NAME = 'pending_stories';
@@ -11,7 +9,7 @@ function openDb() {
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
       if (!db.objectStoreNames.contains(OBJECT_STORE_NAME)) {
-        // 'id' akan menjadi auto-incrementing primary key
+        
         db.createObjectStore(OBJECT_STORE_NAME, { keyPath: 'id', autoIncrement: true });
       }
     };
@@ -29,7 +27,7 @@ function openDb() {
 export async function addPendingStory(story) {
   const db = await openDb();
   return new Promise((resolve, reject) => {
-    // 'story' harus berupa object { description, photo (File/Blob), lat, lon }
+    
     const transaction = db.transaction([OBJECT_STORE_NAME], 'readwrite');
     const store = transaction.objectStore(OBJECT_STORE_NAME);
     const request = store.add(story);
@@ -56,7 +54,7 @@ export async function deletePendingStory(id) {
   return new Promise((resolve, reject) => {
     const transaction = db.transaction([OBJECT_STORE_NAME], 'readwrite');
     const store = transaction.objectStore(OBJECT_STORE_NAME);
-    // Kita harus mengonversi 'id' ke Number karena bisa jadi datang sebagai string dari dataset
+    
     const request = store.delete(Number(id));
 
     request.onsuccess = () => resolve();

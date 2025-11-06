@@ -6,7 +6,7 @@ class App {
   #content = null;
   #drawerButton = null;
   #navigationDrawer = null;
-  #isTransitioning = false; // <-- TAMBAHKAN INI
+  #isTransitioning = false; 
 
   constructor({ navigationDrawer, drawerButton, content }) {
     this.#content = content;
@@ -73,10 +73,10 @@ class App {
   }
 
   async renderPage() {
-    // Cek apakah transisi sedang berjalan
-    if (this.#isTransitioning) { // <-- TAMBAHKAN INI
-      return; // <-- TAMBAHKAN INI (Batalkan render baru)
-    } // <-- TAMBAHKAN INI
+    
+    if (this.#isTransitioning) { 
+      return; 
+    } 
 
     const url = getActiveRoute() || '/';
     const PageClass = routes[url];
@@ -90,7 +90,7 @@ class App {
     const page = new PageClass();
 
     try {
-      this.#isTransitioning = true; // <-- TAMBAHKAN INI (Kunci transisi)
+      this.#isTransitioning = true; 
 
       if (!document.startViewTransition) {
         this.#content.innerHTML = await page.render();
@@ -109,9 +109,9 @@ class App {
         window.location.hash = '#/login';
       }
     } finally {
-      // Pastikan kunci transisi selalu dilepas,
-      // baik berhasil maupun gagal
-      this.#isTransitioning = false; // <-- TAMBAHKAN BLOK 'finally' INI
+      
+      
+      this.#isTransitioning = false; 
     }
 
     this._updateNavUI();

@@ -1,27 +1,24 @@
-// --- LOGIKA PWA CACHING (Kriteria 3) - DIPERBAIKI ---
-
-// Nama Cache (Versi dinaikkan ke v2 untuk memicu pembaruan)
 const APP_SHELL_CACHE_NAME = 'app-shell-v2';
 const DYNAMIC_CACHE_NAME = 'dynamic-data-v2';
 
-// URL API
+
 const API_BASE_URL = 'https://story-api.dicoding.dev/v1';
 
-// Daftar Aset untuk App Shell
+
 const APP_SHELL_URLS = [
   '/',
   '/index.html',
   '/manifest.json',
   '/favicon.png',
   '/images/logo.png',
-  '/app.bundle.js', // <-- Baris ini sudah benar
+  '/app.bundle.js', 
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
   'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
   'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png'
 ];
 
-// 1. Peristiwa 'install': Menyimpan App Shell ke cache
+
 self.addEventListener('install', (event) => {
   console.log('Service Worker: Menginstal v2...');
   event.waitUntil(
@@ -37,7 +34,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// 2. Peristiwa 'activate': Membersihkan cache lama
+
 self.addEventListener('activate', (event) => {
   console.log('Service Worker: Mengaktifkan v2...');
   event.waitUntil(
@@ -51,14 +48,14 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 3. Peristiwa 'fetch': Menerapkan strategi caching
+
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  // --- REVISI DI BARIS BERIKUT ---
-  // Strategi 1: Network First, falling back to Cache (untuk API)
+  
+  
   if (url.href.startsWith(API_BASE_URL)) {
-    // PERBAIKAN: Hanya cache request 'GET'. Lewati 'POST', 'DELETE', dll.
+    
     if (event.request.method !== 'GET') {
       event.respondWith(fetch(event.request));
       return;
@@ -70,14 +67,14 @@ self.addEventListener('fetch', (event) => {
           if (networkResponse && networkResponse.ok) {
             return caches.open(DYNAMIC_CACHE_NAME).then((cache) => {
               cache.put(event.request, networkResponse.clone());
-              // PERBAIKAN: Kembalikan respons setelah di-cache
+              
               return networkResponse;
             });
           }
           return networkResponse;
         })
         .catch(() => {
-          // Jika network gagal (offline), coba ambil dari cache
+          
           console.log('Service Worker: Network gagal, mengambil dari cache untuk:', url.pathname);
           return caches.match(event.request);
         })
@@ -85,7 +82,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Strategi 2: Cache First, falling back to Network (untuk App Shell & Aset lainnya)
+  
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
@@ -99,7 +96,7 @@ self.addEventListener('fetch', (event) => {
                    if (url.origin === self.origin) { 
                        cache.put(event.request, networkResponse.clone());
                    }
-                   // PERBAIKAN: Kembalikan respons setelah di-cache
+                   
                    return networkResponse;
                 });
            }
@@ -107,15 +104,15 @@ self.addEventListener('fetch', (event) => {
         }
       ).catch(() => {
          console.warn('Service Worker: Aset gagal diambil:', event.request.url);
-         // PERBAIKAN: Kembalikan respons 'undefined' (atau fallback) agar tidak crash
-         // Dalam kasus ini, kita tidak mengembalikan apa-apa, yang valid untuk 'fetch'.
+         
+         
       });
     })
   );
 });
 
 
-// --- LOGIKA PUSH NOTIFICATION (Kriteria 2 - Tidak Berubah) ---
+
 
 self.addEventListener('push', (event) => {
   console.log('Service Worker: Push Diterima.');

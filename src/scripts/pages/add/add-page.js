@@ -1,6 +1,6 @@
 import StoryApi from '../../data/api';
 import { getUserToken } from '../../utils/auth';
-// TAMBAHKAN IMPORT INI untuk Kriteria 4
+
 import { addPendingStory } from '../../utils/offline-db';
 
 export default class AddStoryPage {
@@ -113,7 +113,7 @@ export default class AddStoryPage {
          errorMessage.style.display = 'block';
     }
 
-    // --- BLOK SUBMIT INI TELAH DIREVISI ---
+    
     addStoryForm.addEventListener('submit', async (event) => {
       event.preventDefault();
 
@@ -128,7 +128,7 @@ export default class AddStoryPage {
       }
 
       const description = descriptionInput.value;
-      const photo = photoInput.files[0]; // Ini adalah File object
+      const photo = photoInput.files[0]; 
       const lat = this.#latitude;
       const lon = this.#longitude;
 
@@ -137,9 +137,9 @@ export default class AddStoryPage {
       successMessage.style.display = 'none';
       errorMessage.style.display = 'none';
 
-      // REVISI: Hapus cek 'navigator.onLine'
       
-      // REVISI: Selalu coba kirim ke API terlebih dahulu
+      
+      
       try {
         const formData = new FormData();
         formData.append('description', description);
@@ -161,12 +161,12 @@ export default class AddStoryPage {
       } catch (error) {
         console.error('Add story failed:', error);
         
-        // --- REVISI: Logika Offline dipindahkan ke dalam 'catch' ---
-        // Cek apakah error ini adalah error jaringan (offline)
+        
+        
         if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
           console.log('Gagal fetch (mungkin offline). Menyimpan cerita ke IndexedDB...');
           try {
-            // 'photo' (File object) dapat disimpan langsung di IndexedDB
+            
             await addPendingStory({ description, photo, lat, lon });
             
             successMessage.textContent = 'Anda sedang offline. Cerita disimpan secara lokal dan akan diunggah saat kembali online.';
@@ -184,11 +184,11 @@ export default class AddStoryPage {
             errorMessage.style.display = 'block';
           }
         } else {
-          // Jika ini error lain (misal: error 400 dari server), tampilkan error
+          
           errorMessage.textContent = `Gagal menambahkan cerita: ${error.message}`;
           errorMessage.style.display = 'block';
         }
-        // --- AKHIR BLOK REVISI ---
+        
 
       } finally {
         submitButton.disabled = false;
@@ -200,7 +200,7 @@ export default class AddStoryPage {
      photoInput.addEventListener('change', () => this._validateInput(photoInput));
   }
 
-  // --- HELPER BARU: Untuk reset form ---
+  
   _resetForm(form, imagePreview, latDisplay, lonDisplay) {
     form.reset();
     imagePreview.style.display = 'none';
@@ -214,7 +214,7 @@ export default class AddStoryPage {
     this.#longitude = null;
   }
 
-  // --- FUNGSI VALIDASI (Tidak Berubah) ---
+  
   _validateInput(inputElement) {
     let isValid = false;
     const feedbackElement = inputElement.parentElement.querySelector('.invalid-feedback');

@@ -1,9 +1,9 @@
 import { getAllPendingStories, deletePendingStory } from '../../utils/offline-db';
-import { showFormattedDate } from '../../utils/index'; // Kita gunakan ini untuk ID
-import { syncPendingStories } from '../../utils/offline-sync'; // <-- TAMBAHKAN IMPORT INI
+import { showFormattedDate } from '../../utils/index'; 
+import { syncPendingStories } from '../../utils/offline-sync'; 
 
 export default class OfflinePage {
-  #stories = []; // Untuk menyimpan data asli untuk filtering
+  #stories = []; 
 
   async render() {
     return `
@@ -29,9 +29,9 @@ export default class OfflinePage {
   async afterRender() {
     const storyListElement = document.getElementById('pending-story-list');
     const searchInput = document.getElementById('searchInput');
-    const syncButton = document.getElementById('syncButton'); // <-- AMBIL TOMBOL SYNC
+    const syncButton = document.getElementById('syncButton'); 
 
-    // 1. Load dan tampilkan data (Basic - Read)
+    
     try {
       this.#stories = await getAllPendingStories();
       this._renderList(this.#stories, storyListElement);
@@ -40,7 +40,7 @@ export default class OfflinePage {
       storyListElement.innerHTML = '<p>Gagal memuat cerita tertunda.</p>';
     }
 
-    // 2. Tambahkan listener untuk Search (Skilled - Search)
+    
     searchInput.addEventListener('input', (event) => {
       const query = event.target.value.toLowerCase();
       const filteredStories = this.#stories.filter(story =>
@@ -49,14 +49,14 @@ export default class OfflinePage {
       this._renderList(filteredStories, storyListElement);
     });
 
-    // --- REVISI: LISTENER UNTUK TOMBOL SYNC ---
+    
     syncButton.addEventListener('click', async (event) => {
       event.target.disabled = true;
       event.target.textContent = 'Menyinkronkan...';
 
       try {
         await syncPendingStories();
-        // Setelah sync, refresh daftar di halaman ini
+        
         this.#stories = await getAllPendingStories();
         this._renderList(this.#stories, storyListElement);
       } catch (error) {
@@ -67,7 +67,7 @@ export default class OfflinePage {
         event.target.textContent = 'Sinkronkan Cerita Tertunda';
       }
     });
-    // --- AKHIR REVISI ---
+    
   }
 
   _renderList(stories, container) {
@@ -78,7 +78,7 @@ export default class OfflinePage {
     }
 
     stories.forEach(story => {
-      // Kita buat URL sementara untuk preview gambar
+      
       const photoUrl = URL.createObjectURL(story.photo);
       container.innerHTML += `
         <article class="story-item" data-id="${story.id}">
@@ -99,8 +99,8 @@ export default class OfflinePage {
       `;
     });
 
-    // 3. Tambahkan listener untuk Delete (Basic - Delete)
-    // Logika ini sudah ada dan berfungsi
+    
+    
     container.querySelectorAll('.delete-button').forEach(button => {
       button.addEventListener('click', async (event) => {
         event.preventDefault();
@@ -109,7 +109,7 @@ export default class OfflinePage {
         if (confirm('Anda yakin ingin menghapus cerita tertunda ini?')) {
           try {
             await deletePendingStory(storyId);
-            // Muat ulang daftar setelah menghapus
+            
             this.#stories = await getAllPendingStories();
             this._renderList(this.#stories, container);
           } catch (error) {
@@ -120,7 +120,7 @@ export default class OfflinePage {
       });
     });
 
-    // 4. Revoke Object URL setelah gambar dimuat (untuk manajemen memori)
+    
     container.querySelectorAll('img').forEach(img => {
       img.onload = () => URL.revokeObjectURL(img.src);
     });

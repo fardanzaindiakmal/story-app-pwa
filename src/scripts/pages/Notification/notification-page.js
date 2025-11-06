@@ -21,7 +21,7 @@ export default class NotificationPage {
        return;
     }
 
-    // Cek status awal saat halaman dimuat
+    
     let isSubscribed = false;
     try {
         isSubscribed = await getSubscriptionState();
@@ -31,7 +31,7 @@ export default class NotificationPage {
         toggleButton.textContent = 'Error';
     }
 
-    // Tambahkan event listener
+    
     toggleButton.addEventListener('click', async () => {
       toggleButton.disabled = true;
       toggleButton.textContent = 'Memproses...';
@@ -53,15 +53,15 @@ export default class NotificationPage {
     });
   }
 
-  // Fungsi helper untuk update UI tombol
+  
   _updateToggleButtonUI(button, isSubscribed) {
      if (isSubscribed) {
         button.textContent = 'Nonaktifkan Notifikasi';
-        button.style.backgroundColor = '#f8d7da'; // Merah muda
+        button.style.backgroundColor = '#f8d7da'; 
         button.style.color = '#721c24';
      } else {
         button.textContent = 'Aktifkan Notifikasi';
-        button.style.backgroundColor = '#d4edda'; // Hijau muda
+        button.style.backgroundColor = '#d4edda'; 
         button.style.color = '#155724';
      }
   }

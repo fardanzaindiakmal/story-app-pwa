@@ -1,10 +1,10 @@
 import StoryApi from '../data/api';
 import { getUserToken } from './auth';
 
-// VAPID Public Key dari dokumentasi API
+
 const VAPID_PUBLIC_KEY = 'BCCs2eonMI-6H2ctvFaWg-UYdDv387Vno_bzUzALpB442r2lCnsHmtrx8biyPi_E-1fSGABK_Qs_GlvPoJJqxbk';
 
-// Fungsi helper untuk mengubah VAPID key
+
 function urlBase64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
@@ -16,7 +16,7 @@ function urlBase64ToUint8Array(base64String) {
   return outputArray;
 }
 
-// Fungsi untuk mendaftarkan Service Worker
+
 async function registerServiceWorker() {
   if (!('serviceWorker' in navigator)) {
     console.error('Service Worker tidak didukung di browser ini.');
@@ -24,9 +24,9 @@ async function registerServiceWorker() {
   }
 
   try {
-    // Perhatikan path '/sw.js'. Pastikan sw.js ada di root (level yg sama dgn index.html)
-    // Jika Anda menggunakan build tool seperti Webpack, path ini mungkin perlu disesuaikan.
-    // Berdasarkan struktur Anda, '/sw.js' seharusnya benar.
+    
+    
+    
     const registration = await navigator.serviceWorker.register('/sw.js'); 
     console.log('Service Worker berhasil didaftarkan:', registration);
   } catch (error) {
@@ -34,7 +34,7 @@ async function registerServiceWorker() {
   }
 }
 
-// Fungsi untuk meminta izin notifikasi
+
 async function requestNotificationPermission() {
   if (!('Notification' in window)) {
     console.error('Browser ini tidak mendukung notifikasi desktop.');
@@ -49,22 +49,22 @@ async function requestNotificationPermission() {
   }
 }
 
-// Fungsi utama untuk inisialisasi (dipanggil oleh index.js)
+
 export async function initPushNotification() {
   await registerServiceWorker();
   await requestNotificationPermission();
 }
 
-// Fungsi untuk memeriksa status langganan (dipakai di about-page.js)
+
 export async function getSubscriptionState() {
   if (!('serviceWorker' in navigator)) return false;
 
   const registration = await navigator.serviceWorker.ready;
   const subscription = await registration.pushManager.getSubscription();
-  return !!subscription; // Mengembalikan true jika ada, false jika tidak
+  return !!subscription; 
 }
 
-// Fungsi untuk subscribe (dipakai di about-page.js)
+
 export async function subscribePush() {
   const token = getUserToken();
   if (!token) {
@@ -77,7 +77,7 @@ export async function subscribePush() {
     return;
   }
 
-  // Minta izin dulu jika belum
+  
   const permission = await Notification.requestPermission();
   if (permission === 'denied') {
     alert('Izin notifikasi ditolak.');
@@ -97,7 +97,7 @@ export async function subscribePush() {
       });
     }
     
-    // Kirim subscription ke server API
+    
     await StoryApi.subscribePush(token, subscription);
     console.log('Berhasil subscribe push notification.');
     alert('Notifikasi berhasil diaktifkan!');
@@ -112,10 +112,10 @@ export async function subscribePush() {
   }
 }
 
-// Fungsi untuk unsubscribe (dipakai di about-page.js)
+
 export async function unsubscribePush() {
   const token = getUserToken();
-  if (!token) return; // Tidak perlu notif jika user tidak login
+  if (!token) return; 
 
   try {
     const registration = await navigator.serviceWorker.ready;
@@ -123,9 +123,9 @@ export async function unsubscribePush() {
 
     if (subscription) {
       const endpoint = subscription.endpoint;
-      // Hapus langganan dari server API
+      
       await StoryApi.unsubscribePush(token, endpoint);
-      // Hapus langganan dari browser
+      
       await subscription.unsubscribe();
       
       console.log('Berhasil unsubscribe push notification.');

@@ -1,5 +1,5 @@
 import StoryApi from '../../data/api';
-// PERBAIKAN: Tambahkan 'removeUserToken' ke import
+
 import { getUserToken, removeUserToken } from '../../utils/auth'; 
 import { showFormattedDate } from '../../utils/index';
 
@@ -58,18 +58,18 @@ export default class HomePage {
       });
 
     } catch (error) {
-      // Tampilkan pesan error (ini normal saat offline)
+      
       storyListElement.innerHTML = `<p>Error: ${error.message}. Gagal memuat data baru. Menampilkan data dari cache jika ada.</p>`;
       
-      // --- REVISI DI BLOK IF BERIKUT ---
-      // HANYA logout jika errornya spesifik tentang Token, Auth, atau 401.
-      // JANGAN logout jika errornya "Failed to fetch stories" (karena itu error offline)
+      
+      
+      
       if (error.message.includes('Token') || error.message.includes('Auth') || error.message.includes('401')) {
         
         removeUserToken();
         window.location.hash = '#/login';
       }
-      // --- AKHIR REVISI ---
+      
     }
   }
 

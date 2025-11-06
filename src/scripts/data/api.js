@@ -5,7 +5,7 @@ const API_ENDPOINTS = {
   LOGIN: `${CONFIG.BASE_URL}/login`,
   GET_ALL_STORIES: `${CONFIG.BASE_URL}/stories`,
   ADD_NEW_STORY: `${CONFIG.BASE_URL}/stories`,
-  // Tambahkan endpoint baru untuk notifikasi
+  
   NOTIFICATIONS: `${CONFIG.BASE_URL}/notifications/subscribe`,
 };
 
@@ -113,29 +113,26 @@ class StoryApi {
     return responseJson;
   }
 
-  // == METHOD BARU UNTUK PUSH NOTIFICATION (DIREVISI) ==
+  
 
-  /**
-   * Mengirim data langganan push notification ke server.
-   * @param {string} token - Token autentikasi pengguna.
-   * @param {PushSubscription} subscription - Objek subscription dari PushManager.
-   */
+  
   static async subscribePush(token, subscription) {
     if (!token) {
       throw new Error('Authentication token is missing.');
     }
 
-    // --- REVISI DIMULAI DI SINI ---
-    // 1. Ubah objek PushSubscription menjadi objek JSON biasa
+    
+    
     const subscriptionJson = subscription.toJSON();
 
-    // 2. Buat objek baru yang "bersih" HANYA dengan properti yang diizinkan API
-    // (endpoint dan keys). Ini akan membuang "expirationTime" secara otomatis.
+    
+    
+    
     const sanitizedSubscription = {
       endpoint: subscriptionJson.endpoint,
       keys: subscriptionJson.keys,
     };
-    // --- REVISI SELESAI ---
+    
 
     const response = await fetch(API_ENDPOINTS.NOTIFICATIONS, {
       method: 'POST',
@@ -143,7 +140,7 @@ class StoryApi {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
       },
-      // 3. Kirim objek yang sudah bersih (bukan 'subscription' asli)
+      
       body: JSON.stringify(sanitizedSubscription),
     });
 
@@ -154,11 +151,7 @@ class StoryApi {
     return responseJson;
   }
 
-  /**
-   * Memberitahu server untuk menghapus langganan push notification.
-   * @param {string} token - Token autentikasi pengguna.
-   * @param {string} endpoint - Endpoint URL dari subscription yang akan dihapus.
-   */
+  
   static async unsubscribePush(token, endpoint) {
     if (!token) {
       throw new Error('Authentication token is missing.');
